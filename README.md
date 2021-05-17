@@ -29,7 +29,7 @@ allprojects {
 ```
 2.app 添加依赖
 ```
- implementation 'com.github.chentaishan:FlowingLayout:-SNAPSHOT'
+   implementation 'com.github.chentaishan:FlowingLayout:1.1.0'
 ```
 3.案例使用
 ```
