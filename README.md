@@ -10,8 +10,9 @@ Android流式布局
 * 3.支持填充颜色
 * 4.支持圆角弧度
 
-效果图：
-[1]: https://github.com/chentaishan/FlowingLayout/blob/ef90a5616f5a7a01d2df1ceec26036125318f8a4/images/img1.png
+效果图： 
+
+![img](https://github.com/chentaishan/FlowingLayout/blob/ef90a5616f5a7a01d2df1ceec26036125318f8a4/images/img1.png)
 
 
 1.如何使用
