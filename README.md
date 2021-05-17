@@ -30,7 +30,7 @@ allprojects {
 ```
 2.app 添加依赖
 ```
-   implementation 'com.github.chentaishan:FlowingLayout:1.1.0'
+   implementation 'com.github.cts33:FlowingLayout:1.1.0'
 ```
 3.案例使用
 ```
