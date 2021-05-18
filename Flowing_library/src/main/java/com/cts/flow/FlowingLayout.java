@@ -70,9 +70,9 @@ public class FlowingLayout extends ViewGroup {
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (modeWidth == MeasureSpec.AT_MOST) {
-            throw new RuntimeException("FlowLayout: layout_width  must not  be set to wrap_content !!!");
-        }
+//        if (modeWidth == MeasureSpec.AT_MOST) {
+//            throw new RuntimeException("FlowLayout: layout_width  must not  be set to wrap_content !!!");
+//        }
 //        当前控件的宽度
         int width = getPaddingLeft() + getPaddingRight()+this.strokeWidth*2;
 
