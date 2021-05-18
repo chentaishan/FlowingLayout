@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mFlow.setChildLRMargin(20);
         mFlow.setChildTBMargin(5);
         mFlow.setPadding(15,15,15,15);
-        mFlow.setBorder("#DAE0DC",0, Color.RED,15);
+        mFlow.setBorder("#DAE0DC",1, Color.RED,15);
         mFlow.setChildTextColor(Color.parseColor("#262E79"));
 
         mFlow.setAdapter(commonFlowAdapter);
