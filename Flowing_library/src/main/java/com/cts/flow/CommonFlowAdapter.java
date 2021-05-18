@@ -57,13 +57,14 @@ public abstract class CommonFlowAdapter<T> extends FlowBaseAdapter<T> {
         private SparseArray<View> mViews;
         private View mConvertView;
 
+        int default_tv_id = R.id.title;
         public FlowHolder(Context context, ViewGroup parent, int layoutId) {
             this.mViews = new SparseArray<View>();
             mConvertView = LayoutInflater.from(context).inflate(layoutId, parent, false);
         }
 
-        public FlowHolder setText(int viewId, CharSequence text) {
-            TextView tv = getView(viewId);
+        public FlowHolder setText( CharSequence text) {
+            TextView tv = getView(default_tv_id);
             tv.setText(text);
             return this;
         }

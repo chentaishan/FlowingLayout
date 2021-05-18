@@ -35,12 +35,12 @@ public class FlowingLayout extends ViewGroup {
             changeAdapter();
         }
     };
-    private int l;
-    private int t;
-    private int r;
-    private int b;
-    private int strokeWidth;
-    private int textChildColor;
+    private int l =15;
+    private int t =5;
+    private int r =15;
+    private int b =5;
+    private int strokeWidth = 1;
+    private int textChildColor = R.color.black;
 
     public FlowingLayout(Context context) {
         this(context, null);
@@ -136,10 +136,10 @@ public class FlowingLayout extends ViewGroup {
 //    每一行的子元素
     private List<View> lineViews = new ArrayList<>();
 
-    private int leftMargin = 0;
-    private int rightMargin = 0;
-    private int topMargin = 0;
-    private int bottomMargin = 0;
+    private int leftMargin = 10;
+    private int rightMargin = 10;
+    private int topMargin = 5;
+    private int bottomMargin = 5;
 
     /**
      * 设置左右 外边距
