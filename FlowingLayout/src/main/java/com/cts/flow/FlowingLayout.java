@@ -84,7 +84,6 @@ public class FlowingLayout extends ViewGroup {
 
         int childCount = getChildCount();
 
-
         for (int i = 0; i < childCount; i++) {
 
             View child = getChildAt(i);
@@ -127,11 +126,14 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    protected List<List<View>> mAllViews = new ArrayList<List<View>>();
+    //数据的总结构
+    protected List<List<View>> mAllViews = new ArrayList<List<View>>(); //0-list   1-list
+//    每一行的高度
     protected List<Integer> mLineHeight = new ArrayList<Integer>();
+    //每一行的宽度
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
 
-
+//    每一行的子元素
     private List<View> lineViews = new ArrayList<>();
 
     private int leftMargin = 0;
@@ -243,6 +245,7 @@ public class FlowingLayout extends ViewGroup {
 
 //            MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
+            //子元素的宽高
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
 
@@ -342,6 +345,10 @@ public class FlowingLayout extends ViewGroup {
     }
 
 
+    /**
+     * 设置适配器
+     * @param adapter
+     */
     public void setAdapter(CommonFlowAdapter adapter) {
 
         if (mTagAdapter!=null){
@@ -359,6 +366,7 @@ public class FlowingLayout extends ViewGroup {
         TagView tagViewContainer = null;
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
+//            获取内部子元素控件
             View tagView = mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
 
             mTagAdapter.getTextView().setTextColor(textChildColor);

@@ -48,17 +48,16 @@ public class MainActivity extends AppCompatActivity {
         list.add("FFFFFFFF");
 
         mFlow = (FlowingLayout) findViewById(R.id.flow);
-        mFlow.setChildLRMargin(10);
+        mFlow.setChildLRMargin(20);
         mFlow.setChildTBMargin(5);
-        mFlow.setPadding(15,5,15,5);
-        mFlow.setBorder("#DAE0DC",1, Color.RED,15);
+        mFlow.setPadding(15,15,15,15);
+        mFlow.setBorder("#DAE0DC",0, Color.RED,15);
         mFlow.setChildTextColor(Color.parseColor("#262E79"));
 
         mFlow.setAdapter(commonFlowAdapter);
 
         commonFlowAdapter.addItems(list);
 
-        commonFlowAdapter.notifyDataSetChanged();
 
     }
 }
