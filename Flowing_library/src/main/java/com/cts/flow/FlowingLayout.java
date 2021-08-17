@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +21,7 @@ public class FlowingLayout extends ViewGroup {
 
     private final int mGravity;
 
-    private Drawable default_border;
+//    private Drawable default_border;
 
     private static final int LEFT = -1;
     private static final int CENTER = 0;
@@ -58,10 +59,9 @@ public class FlowingLayout extends ViewGroup {
         ta.recycle();
 
 
-        default_border = context.getResources().getDrawable(R.drawable.item_border);
-
     }
 
+    private static final String TAG = "FlowingLayout";
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // 获取XML设置的大小和测量模式
@@ -70,13 +70,11 @@ public class FlowingLayout extends ViewGroup {
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-//        if (modeWidth == MeasureSpec.AT_MOST) {
-//            throw new RuntimeException("FlowLayout: layout_width  must not  be set to wrap_content !!!");
-//        }
-//        当前控件的宽度
-        int width = getPaddingLeft() + getPaddingRight()+this.strokeWidth*2;
 
-        int height = getPaddingTop() + getPaddingBottom()+this.strokeWidth*2;
+//        当前控件的宽度
+        int width = getPaddingLeft() + getPaddingRight();
+
+        int height = getPaddingTop() + getPaddingBottom();
         // 添加元素后，计算当前占用的行宽
         int lineWidth = 0;
         // 行高
@@ -87,32 +85,26 @@ public class FlowingLayout extends ViewGroup {
         for (int i = 0; i < childCount; i++) {
 
             View child = getChildAt(i);
-            if (child.getVisibility() == View.GONE) {
-                //判断最后一个，计算自身宽高
-                if (i == childCount - 1) {
-                    width = Math.max(lineWidth, width);
-                    height += lineHeight;
-                }
-                continue;
-            }
+
             //测量子元素的宽高
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
 
-
-            MarginLayoutParams lp = (MarginLayoutParams) child
-                    .getLayoutParams();
 //            获取子元素的宽高
-            int childWidth = child.getMeasuredWidth() + leftMargin  + rightMargin+this.strokeWidth*2;;
-            int childHeight = child.getMeasuredHeight() + topMargin + bottomMargin+this.strokeWidth*2;;
+            int childWidth = child.getMeasuredWidth() + leftMargin  + rightMargin ;;
+            int childHeight = child.getMeasuredHeight() + topMargin +  bottomMargin;;
 
             if (lineWidth + childWidth > widthSize) {
                 width = Math.max(width, lineWidth);
                 lineWidth = childWidth;
+
+
                 height += lineHeight;
                 lineHeight = childHeight;
+                Log.d(TAG, "onMeasure: "+height);
             } else {
                 lineWidth += childWidth;
                 lineHeight = Math.max(lineHeight, childHeight);
+
             }
             if (i == childCount - 1) {
                 width = Math.max(lineWidth, width);
@@ -182,28 +174,21 @@ public class FlowingLayout extends ViewGroup {
         this.r = r;
         this.b = b;
     }
-    /**
-     *
-     * @param colorValue 内容填充颜色值  字符串类型  eg:#fffff
-     * @param strokeWidth  线的粗细  Set the width for stroking.
-     * @param strokeColor  线的颜色
-     * @param radius  圆角弧度
-     * @return
-     */
-    public void setBorder(String colorValue, int strokeWidth,int strokeColor,int radius) {
-        this.strokeWidth = strokeWidth;
+
+    public  Drawable getBgDrawable() {
 
         GradientDrawable radiusBg = new GradientDrawable();
         //设置Shape类型
         radiusBg.setShape(GradientDrawable.RECTANGLE);
         //设置填充颜色
-        radiusBg.setColor(Color.parseColor(colorValue));
+//        radiusBg.setColor(Color.parseColor(colorValue));
         //设置线条粗心和颜色,px
-        radiusBg.setStroke(strokeWidth, strokeColor);
+        radiusBg.setStroke(strokeWidth, Color.GRAY);
         //设置圆角角度,如果每个角度都一样,则使用此方法
-        radiusBg.setCornerRadius(radius);
+        radiusBg.setCornerRadius(15);
 
-        default_border = radiusBg;
+        return radiusBg;
+
     }
 
     public void setChildTextColor(int textChildColor){
@@ -250,17 +235,17 @@ public class FlowingLayout extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
 
-            if (childWidth + lineWidth + leftMargin + rightMargin+this.strokeWidth*2 > width - getPaddingLeft() - getPaddingRight()) {
+            if (childWidth + lineWidth + leftMargin + rightMargin > width - getPaddingLeft() - getPaddingRight()) {
                 mLineHeight.add(lineHeight);
                 mAllViews.add(lineViews);
                 mLineWidth.add(lineWidth);
 
                 lineWidth = 0;
-                lineHeight = childHeight + topMargin + bottomMargin+this.strokeWidth*2;;
+                lineHeight = childHeight + topMargin + bottomMargin;;
                 lineViews = new ArrayList<View>();
             }
-            lineWidth += childWidth + leftMargin + rightMargin+this.strokeWidth*2;;
-            lineHeight = Math.max(lineHeight, childHeight + topMargin + bottomMargin+this.strokeWidth*2);
+            lineWidth += childWidth + leftMargin + rightMargin;;
+            lineHeight = Math.max(lineHeight, childHeight + topMargin + bottomMargin);
             lineViews.add(child);
 
         }
@@ -308,12 +293,12 @@ public class FlowingLayout extends ViewGroup {
 
             int lc = left + leftMargin;
             int tc = top + topMargin;
-            int rc = lc + child.getMeasuredWidth()+this.strokeWidth*2;
-            int bc = tc + child.getMeasuredHeight()+this.strokeWidth*2;
+            int rc = lc + child.getMeasuredWidth();
+            int bc = tc + child.getMeasuredHeight();
 
             child.layout(lc, tc, rc, bc);
 
-            left += child.getMeasuredWidth() + leftMargin + rightMargin+this.strokeWidth*2;
+            left += child.getMeasuredWidth() + leftMargin + rightMargin;
         }
 
     }
@@ -369,22 +354,14 @@ public class FlowingLayout extends ViewGroup {
 //            获取内部子元素控件
             View tagView = mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
 
-            mTagAdapter.getTextView().setTextColor(textChildColor);
+//            mTagAdapter.getTextView().setTextColor(textChildColor);
             tagViewContainer = new TagView(getContext());
-            tagView.setBackground(default_border);
+
+            tagView.setBackground(getBgDrawable());
             tagView.setDuplicateParentStateEnabled(true);
 
             tagView.setPadding(l,t,r,b);
-            if (tagView.getLayoutParams() != null) {
-                tagViewContainer.setLayoutParams(tagView.getLayoutParams());
-            } else {
-                MarginLayoutParams lp = new MarginLayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                lp.setMargins( leftMargin , topMargin, rightMargin, bottomMargin);
 
-                tagViewContainer.setLayoutParams(lp);
-            }
-            LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            tagView.setLayoutParams(lp);
             tagViewContainer.addView(tagView);
             addView(tagViewContainer);
 
