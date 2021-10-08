@@ -1,97 +1,66 @@
 package com.cts.flow;
 
 import android.content.Context;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static androidx.core.util.Preconditions.checkNotNull;
 
-public abstract class CommonFlowAdapter<T> extends FlowBaseAdapter<T> {
-    protected List<T> mDatas  = new ArrayList<>();
-    private int mLayoutId =R.layout.flow_item;
+public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
+    protected List<D> mDatas = new ArrayList<>();
+    private int mLayoutId = R.layout.flow_item;
     private Context mContext;
-    private FlowHolder holder;
 
-    public CommonFlowAdapter(Context context, List<T> datas ) {
+    private Class<V> viewClass;
+
+    public CommonFlowAdapter(Context context, Class<V> viewClass, List<D> datas) {
         this.mContext = context;
+        this.viewClass = viewClass;
         this.mDatas.clear();
         this.mDatas.addAll(datas);
-
     }
-    public CommonFlowAdapter(Context context) {
+
+    public CommonFlowAdapter(Context context, Class<V> viewClass) {
         this.mContext = context;
+        this.viewClass = viewClass;
     }
 
-    public void addItems(List<T> datas){
+    public void addItems(List<D> datas) {
         this.mDatas.addAll(datas);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mDatas==null? 0: mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
     @Override
-    public View getView(FlowingLayout flowingLayout, int i, T item) {
-        holder = new FlowHolder(mContext, flowingLayout, mLayoutId);
-        convert(holder, mDatas.get(i), i);
-        return holder.getConvertView();
+    public V getView(FlowingLayout flowingLayout, int pos, D itemData) {
+
+        V itemView = newTclass(viewClass);
+        convert(itemView, pos, itemData);
+        return itemView;
     }
 
-    public TextView getTextView(){
-        return holder.getConvertView().findViewById(R.id.title);
-    }
+    public abstract void convert(V itemView, int position, D item);
 
-
-    public abstract void convert(FlowHolder holder, T item, int position);
-
-    public class FlowHolder {
-        private SparseArray<View> mViews;
-        private View mConvertView;
-
-        int default_tv_id = R.id.title;
-        public FlowHolder(Context context, ViewGroup parent, int layoutId) {
-            this.mViews = new SparseArray<View>();
-            mConvertView = LayoutInflater.from(context).inflate(layoutId, parent, false);
+    private <T> T newTclass(Class<T> clazz) {
+        T a = null;
+        try {
+            Constructor<T> constructor = clazz.getDeclaredConstructor(Context.class);
+            a = constructor.newInstance(this.mContext);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
-
-        public FlowHolder setText( CharSequence text) {
-            TextView tv = getView(default_tv_id);
-            tv.setText(text);
-            return this;
-        }
-
-        public <V extends View> V getView(int viewId) {
-            View view = mViews.get(viewId);
-            if (view == null) {
-                view = mConvertView.findViewById(viewId);
-                mViews.put(viewId, view);
-            }
-            return (V) view;
-        }
-
-
-        public FlowHolder setOnClickListener(int viewId,
-                                             View.OnClickListener clickListener) {
-            getView(viewId).setOnClickListener(clickListener);
-            return this;
-        }
-
-        public FlowHolder setItemClick(View.OnClickListener clickListener) {
-            mConvertView.setOnClickListener(clickListener);
-            return this;
-        }
-
-        public View getConvertView() {
-            return mConvertView;
-        }
+        return a;
     }
 }

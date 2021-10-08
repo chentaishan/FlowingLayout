@@ -2,10 +2,9 @@ package com.cts.flow;
 
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
-import android.view.View;
 
 
-public abstract class FlowBaseAdapter<T> {
+public abstract class FlowBaseAdapter<D,V> {
     private  DataSetObservable mDataSetObservable = new DataSetObservable();
 
 
@@ -26,9 +25,9 @@ public abstract class FlowBaseAdapter<T> {
 
     public abstract int getCount();
 
-    public abstract T getItem(int pos);
+    public abstract D getItem(int pos);
 
-    public abstract View getView(FlowingLayout flowingLayout, int i, T item);
+    public abstract V getView(FlowingLayout flowingLayout, int i, D item);
 
 
 

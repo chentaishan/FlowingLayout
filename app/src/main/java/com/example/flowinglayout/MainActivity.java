@@ -2,10 +2,11 @@ package com.example.flowinglayout;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
+import com.cts.flow.BorderTextView;
 import com.cts.flow.CommonFlowAdapter;
 import com.cts.flow.FlowingLayout;
 
@@ -16,19 +17,24 @@ public class MainActivity extends AppCompatActivity {
 
     private FlowingLayout mFlow;
     private List<String> list = new ArrayList<>();
-    CommonFlowAdapter commonFlowAdapter=    new CommonFlowAdapter<String>(this){
+    CommonFlowAdapter commonFlowAdapter = new CommonFlowAdapter<String, BorderTextView>(this,BorderTextView.class) {
+
+        @Override
+        public void convert(BorderTextView itemView, int position, String item) {
+            itemView.setRadiusWidth(10);
+            itemView.setStrokeConfig(1,Color.GRAY);
+            itemView.setTextColor(Color.RED);
+            itemView.setText(item);
+        }
 
         @Override
         public String getItem(int i) {
             return mDatas.get(i);
         }
 
-        @Override
-        public void convert(FlowHolder holder, String item, int position) {
 
-            holder.setText(item);
-        }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
 
-        list.add("111");
-        list.add("2");
-        list.add("3344444444433");
+
         list.add("YYYYYYYY");
         list.add("EEEEE");
         list.add("FFFFFFFF");
@@ -61,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         mFlow = (FlowingLayout) findViewById(R.id.flow);
         mFlow.setChildLRMargin(20);
         mFlow.setChildTBMargin(5);
-        mFlow.setPadding(15,15,15,15);
+        mFlow.setPadding(15, 15, 15, 15);
 //        mFlow.setBorder("#DAE0DC",1, Color.RED,15);
-        mFlow.setChildTextColor(Color.parseColor("#262E79"));
+//        mFlow.setChildTextColor(Color);
 
         mFlow.setAdapter(commonFlowAdapter);
 

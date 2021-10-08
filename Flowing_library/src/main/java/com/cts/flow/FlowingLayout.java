@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,21 +172,21 @@ public class FlowingLayout extends ViewGroup {
         this.b = b;
     }
 
-    public  Drawable getBgDrawable() {
-
-        GradientDrawable radiusBg = new GradientDrawable();
-        //设置Shape类型
-        radiusBg.setShape(GradientDrawable.RECTANGLE);
-        //设置填充颜色
-//        radiusBg.setColor(Color.parseColor(colorValue));
-        //设置线条粗心和颜色,px
-        radiusBg.setStroke(strokeWidth, Color.GRAY);
-        //设置圆角角度,如果每个角度都一样,则使用此方法
-        radiusBg.setCornerRadius(15);
-
-        return radiusBg;
-
-    }
+//    public  Drawable getBgDrawable() {
+//
+//        GradientDrawable radiusBg = new GradientDrawable();
+//        //设置Shape类型
+//        radiusBg.setShape(GradientDrawable.RECTANGLE);
+//        //设置填充颜色
+////        radiusBg.setColor(Color.parseColor(colorValue));
+//        //设置线条粗心和颜色,px
+//        radiusBg.setStroke(strokeWidth, Color.GRAY);
+//        //设置圆角角度,如果每个角度都一样,则使用此方法
+//        radiusBg.setCornerRadius(15);
+//
+//        return radiusBg;
+//
+//    }
 
     public void setChildTextColor(int textChildColor){
         this.textChildColor = textChildColor;
@@ -334,7 +331,7 @@ public class FlowingLayout extends ViewGroup {
      * 设置适配器
      * @param adapter
      */
-    public void setAdapter(CommonFlowAdapter adapter) {
+    public <D,V> void setAdapter(CommonFlowAdapter<D,V> adapter) {
 
         if (mTagAdapter!=null){
             mTagAdapter.unregisterDataSetObserver(dataSetObserver);
@@ -346,24 +343,21 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    private void changeAdapter() {
+    private <D,V>void changeAdapter() {
         removeAllViews();
-        TagView tagViewContainer = null;
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
 //            获取内部子元素控件
-            View tagView = mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
+            V tagView = (V) mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
 
 //            mTagAdapter.getTextView().setTextColor(textChildColor);
-            tagViewContainer = new TagView(getContext());
+//            tagViewContainer = new TagView(getContext());
 
-            tagView.setBackground(getBgDrawable());
-            tagView.setDuplicateParentStateEnabled(true);
+            ((View)tagView).setPadding(l,t,r,b);
 
-            tagView.setPadding(l,t,r,b);
-
-            tagViewContainer.addView(tagView);
-            addView(tagViewContainer);
+//            tagViewContainer.addView(tagView);
+            addView((View)tagView);
+//            tagViewContainer. setConfig(10,Color.RED,Color.BLUE);
 
         }
 
