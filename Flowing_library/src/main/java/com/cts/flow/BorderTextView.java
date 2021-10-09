@@ -6,6 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 
 import androidx.annotation.ColorInt;
@@ -42,8 +45,6 @@ public class BorderTextView extends AppCompatTextView {
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BorderTextView);
         contentColor = ta.getColor(R.styleable.BorderTextView_contentBackColor, Color.WHITE);
-        pressedColor = ta.getColor(R.styleable.BorderTextView_contentPressedColor,getResources().getColor(R.color.press_color));
-        enableColor = ta.getColor(R.styleable.BorderTextView_enableBackColor, getResources().getColor(R.color.press_color));
         strokeWidth = ta.getDimensionPixelSize(R.styleable.BorderTextView_strokeWidth, 1);
         strokeColor = ta.getColor(R.styleable.BorderTextView_strokeColor, Color.GRAY);
         cornerRadius = ta.getDimensionPixelSize(R.styleable.BorderTextView_cornerRadius, 0);
@@ -75,14 +76,17 @@ public class BorderTextView extends AppCompatTextView {
             canvas.drawRoundRect(mRectF, cornerRadius, cornerRadius, mPaint);
         }
     }
+
     /**
-     * 设置圆角度数、边框颜色、边框宽度、字体颜色
+     * 设置圆角度数、边框颜色、边框宽度、字体颜色 内容背景颜色
+     *
      * @param cornerRadius
      * @param strokeWidth
      * @param strokeColor
      * @param textColor
+     * @param contentColor 内容背景颜色
      */
-    public void setStrokeConfig(int cornerRadius,int strokeWidth,@ColorInt int strokeColor,@ColorInt int textColor,@ColorInt int contentColor){
+    public void setStrokeConfig(int cornerRadius, int strokeWidth, @ColorInt int strokeColor, @ColorInt int textColor, @ColorInt int contentColor) {
         this.strokeWidth = strokeWidth;
         this.strokeColor = strokeColor;
         this.cornerRadius = cornerRadius;
@@ -91,5 +95,30 @@ public class BorderTextView extends AppCompatTextView {
         setBackgroundColor(this.contentColor);
         invalidate();
     }
+
+    public void setSelectBgColor(@ColorInt int pressBgColor) {
+        Drawable pressBg=  getPressedSelector(pressBgColor);
+        setBackground(pressBg);
+        invalidate();
+    }
+
+    private Drawable getPressedSelector(int pressedColor) {
+        Drawable enabled = createShape(pressedColor);
+        Drawable pressed = createShape(pressedColor);
+        Drawable normal = createShape(this.contentColor);
+        StateListDrawable drawable = new StateListDrawable();
+        drawable.addState(new int[]{android.R.attr.state_pressed}, pressed);    // 按下状态 , 设置按下的图片
+        drawable.addState(new int[]{android.R.attr.state_enabled}, normal);     // 默认状态,默认状态下的图片
+        drawable.addState(new int[]{}, enabled);
+        return drawable;
+    }
+
+    private GradientDrawable createShape(int color) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setCornerRadius(this.cornerRadius);//设置4个角的弧度
+        drawable.setColor(color);// 设置颜色
+        return drawable;
+    }
+
 }
 
