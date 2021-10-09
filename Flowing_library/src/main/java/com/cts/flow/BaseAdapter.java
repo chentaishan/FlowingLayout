@@ -4,8 +4,8 @@ import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 
 
-public abstract class FlowBaseAdapter<D,V> {
-    private  DataSetObservable mDataSetObservable = new DataSetObservable();
+public abstract class BaseAdapter<D, V> {
+    private DataSetObservable mDataSetObservable = new DataSetObservable();
 
 
     public void unregisterDataSetObserver(DataSetObserver mDataSetObserver) {
@@ -21,14 +21,11 @@ public abstract class FlowBaseAdapter<D,V> {
         mDataSetObservable.notifyChanged();
     }
 
-
-
     public abstract int getCount();
 
     public abstract D getItem(int pos);
 
     public abstract V getView(FlowingLayout flowingLayout, int i, D item);
-
 
 
 }

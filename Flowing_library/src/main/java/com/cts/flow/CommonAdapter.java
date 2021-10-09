@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
+public abstract class CommonAdapter<D, V> extends BaseAdapter<D, V> {
     protected List<D> mDatas = new ArrayList<>();
     protected SparseArray<V> mViews = new SparseArray<>();
 
@@ -17,14 +17,14 @@ public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
 
     private Class<V> viewClass;
 
-    public CommonFlowAdapter(Context context, Class<V> viewClass, List<D> datas) {
+    public CommonAdapter(Context context, Class<V> viewClass, List<D> datas) {
         this.mContext = context;
         this.viewClass = viewClass;
         this.mDatas.clear();
         this.mDatas.addAll(datas);
     }
 
-    public CommonFlowAdapter(Context context, Class<V> viewClass) {
+    public CommonAdapter(Context context, Class<V> viewClass) {
         this.mContext = context;
         this.viewClass = viewClass;
     }
@@ -43,9 +43,9 @@ public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
     public V getView(FlowingLayout flowingLayout, int pos, D itemData) {
 
         V itemView = mViews.get(pos);
-        if (itemView==null){
+        if (itemView == null) {
             itemView = newTclass(viewClass);
-            mViews.put(pos,itemView);
+            mViews.put(pos, itemView);
         }
         convert(itemView, pos, itemData);
         return itemView;

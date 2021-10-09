@@ -7,6 +7,12 @@ import android.util.AttributeSet;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.widget.AppCompatTextView;
 
+/**
+ * 快速实现文字组件添加 边框颜色，边框宽度，内容颜色，圆角
+ * <p>
+ * 1.可以调用setDefaultConfig 使用默认配置
+ * 2.可以使用setSelfConfig 配置自己的实现
+ */
 public class BorderTextView extends AppCompatTextView {
 
     public BorderTextView(Context context) {

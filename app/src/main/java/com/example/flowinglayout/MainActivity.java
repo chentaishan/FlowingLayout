@@ -1,24 +1,17 @@
 package com.example.flowinglayout;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cts.flow.BorderTextView;
-import com.cts.flow.CommonFlowAdapter;
+import com.cts.flow.CommonAdapter;
 import com.cts.flow.FlowingLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.graphics.drawable.GradientDrawable.RECTANGLE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         mBorder.setPadding(5, 5, 5, 5);
         mBorder.setDefaultConfig();
 //        mBorder.setSelfConfig(5, getResources().getColor(R.color.selected_bg_color), 1, getResources().getColor(R.color.stroke_color));
+
+
         initView();
 
 
@@ -106,13 +101,10 @@ public class MainActivity extends AppCompatActivity {
         return gradientDrawable;
     }
 
-    CommonFlowAdapter commonFlowAdapter = new CommonFlowAdapter<String, BorderTextView>(this, BorderTextView.class) {
+    CommonAdapter commonFlowAdapter = new CommonAdapter<String, BorderTextView>(this, BorderTextView.class) {
 
         @Override
         public void convert(BorderTextView itemView, int position, String item) {
-
-//            itemView.setStrokeConfig(5, 1, getResources().getColor(R.color.stroke_color),
-//                    getResources().getColor(R.color.text_color), getResources().getColor(R.color.selected_bg_color));
 
             itemView.setText(item);
         }

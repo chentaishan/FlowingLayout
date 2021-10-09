@@ -23,7 +23,7 @@ public class FlowingLayout extends ViewGroup {
     private static final int LEFT = -1;
     private static final int CENTER = 0;
     private static final int RIGHT = 1;
-    private CommonFlowAdapter mTagAdapter;
+    private CommonAdapter mTagAdapter;
 
     DataSetObserver dataSetObserver = new DataSetObserver() {
         @Override
@@ -317,7 +317,7 @@ public class FlowingLayout extends ViewGroup {
      *
      * @param adapter
      */
-    public <D, V> void setAdapter(CommonFlowAdapter<D, V> adapter) {
+    public <D, V> void setAdapter(CommonAdapter<D, V> adapter) {
 
         if (mTagAdapter != null) {
             mTagAdapter.unregisterDataSetObserver(dataSetObserver);
@@ -329,7 +329,7 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    private <D, V> void changeAdapter() {
+    private <V> void changeAdapter() {
         removeAllViews();
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
@@ -356,7 +356,7 @@ public class FlowingLayout extends ViewGroup {
                 itemView.setBackground(unSelectedDrawable);
             }
             //第一个被默认选中
-            if (currSelectedPos!=-1&&finalI==0){
+            if (currSelectedPos != -1 && finalI == 0) {
                 setSelectBGDrawable(itemView, finalI);
             }
             addView(itemView);
@@ -366,8 +366,8 @@ public class FlowingLayout extends ViewGroup {
     /**
      * 设置默认显示第一个被选中
      */
-    public void setSelectedFirstItem(){
-        currSelectedPos =0;
+    public void setSelectedFirstItem() {
+        currSelectedPos = 0;
     }
 
     private void setSelectBGDrawable(View itemView, int finalI) {
