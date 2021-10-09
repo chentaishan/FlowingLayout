@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         });
         mFlow.setChildLRMargin(20);
         mFlow.setChildTBMargin(5);
-        mFlow.setPadding(15, 15, 15, 15);
+        mFlow.setChildPadding(15, 15, 15, 15);
 
         mFlow.setAdapter(commonFlowAdapter);
 

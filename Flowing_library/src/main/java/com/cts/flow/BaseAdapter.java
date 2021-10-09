@@ -16,7 +16,6 @@ public abstract class BaseAdapter<D, V> {
         mDataSetObservable.registerObserver(mDataSetObserver);
     }
 
-
     public void notifyDataSetChanged() {
         mDataSetObservable.notifyChanged();
     }

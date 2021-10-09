@@ -19,24 +19,47 @@ import java.util.List;
 public class FlowingLayout extends ViewGroup {
 
     private final int mGravity;
-
     private static final int LEFT = -1;
     private static final int CENTER = 0;
     private static final int RIGHT = 1;
     private CommonAdapter mTagAdapter;
 
-    DataSetObserver dataSetObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            super.onChanged();
 
-            changeAdapter();
-        }
-    };
     private int l = 15;
     private int t = 5;
     private int r = 15;
     private int b = 5;
+
+    //数据的总结构
+    protected List<List<View>> mAllViews = new ArrayList<List<View>>(); //0-list   1-list
+    //每一行的高度
+    protected List<Integer> mLineHeight = new ArrayList<Integer>();
+    //每一行的宽度
+    protected List<Integer> mLineWidth = new ArrayList<Integer>();
+
+    //每一行的子元素
+    private List<View> lineViews = new ArrayList<>();
+
+    private int leftMargin = 10;
+    private int rightMargin = 10;
+    private int topMargin = 5;
+    private int bottomMargin = 5;
+
+    //单选记录上次选中的view的下标
+    private int currSelectedPos = -1;
+
+    private Drawable selectedDrawable;
+    private Drawable unSelectedDrawable;
+
+    private OnItemChangedListener onItemChangedListener;
+
+    DataSetObserver dataSetObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            changeAdapter();
+        }
+    };
 
     public FlowingLayout(Context context) {
         this(context, null);
@@ -52,11 +75,7 @@ public class FlowingLayout extends ViewGroup {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FlowingLayout);
         mGravity = ta.getInt(R.styleable.FlowingLayout_tag_gravity, LEFT);
         ta.recycle();
-
-
     }
-
-    private static final String TAG = "FlowingLayout";
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -98,11 +117,9 @@ public class FlowingLayout extends ViewGroup {
 
                 height += lineHeight;
                 lineHeight = childHeight;
-                Log.d(TAG, "onMeasure: " + height);
             } else {
                 lineWidth += childWidth;
                 lineHeight = Math.max(lineHeight, childHeight);
-
             }
             if (i == childCount - 1) {
                 width = Math.max(lineWidth, width);
@@ -116,20 +133,6 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    //数据的总结构
-    protected List<List<View>> mAllViews = new ArrayList<List<View>>(); //0-list   1-list
-    //每一行的高度
-    protected List<Integer> mLineHeight = new ArrayList<Integer>();
-    //每一行的宽度
-    protected List<Integer> mLineWidth = new ArrayList<Integer>();
-
-    //每一行的子元素
-    private List<View> lineViews = new ArrayList<>();
-
-    private int leftMargin = 10;
-    private int rightMargin = 10;
-    private int topMargin = 5;
-    private int bottomMargin = 5;
 
     /**
      * 设置左右 外边距
@@ -168,7 +171,7 @@ public class FlowingLayout extends ViewGroup {
      * @param r
      * @param b
      */
-    public void setPadding(int l, int t, int r, int b) {
+    public void setChildPadding(int l, int t, int r, int b) {
         this.l = l;
         this.t = t;
         this.r = r;
@@ -329,7 +332,7 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    private <D,V> void changeAdapter() {
+    private <D, V> void changeAdapter() {
         removeAllViews();
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
@@ -348,7 +351,7 @@ public class FlowingLayout extends ViewGroup {
                     resetSelectBGDrawable();
 
                     if (onItemChangedListener != null) {
-                        onItemChangedListener.itemClick(tagView, finalI,dataItem);
+                        onItemChangedListener.itemClick(tagView, finalI, dataItem);
                     }
                     setSelectBGDrawable(itemView, finalI);
                 }
@@ -394,14 +397,6 @@ public class FlowingLayout extends ViewGroup {
         }
     }
 
-    //单选记录上次选中的view的下标
-    private int currSelectedPos = -1;
-
-    private Drawable selectedDrawable;
-    private Drawable unSelectedDrawable;
-
-    private OnItemChangedListener onItemChangedListener;
-
     public void setOnItemChangedListener(OnItemChangedListener onItemChangedListener) {
         this.onItemChangedListener = onItemChangedListener;
     }
@@ -411,7 +406,7 @@ public class FlowingLayout extends ViewGroup {
         this.unSelectedDrawable = unSelectedDrawable;
     }
 
-    public interface OnItemChangedListener<D,V> {
-        void itemClick(V itemView, int pos,D itemData);
+    public interface OnItemChangedListener<D, V> {
+        void itemClick(V itemView, int pos, D itemData);
     }
 }
