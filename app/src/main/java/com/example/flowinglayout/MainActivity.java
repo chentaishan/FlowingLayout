@@ -63,19 +63,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         mFlow = (FlowingLayout) findViewById(R.id.flow);
-        mFlow.setBgDrawable(selectedShape,unSelectedShape );
-
+        //设置item 选中和未选的shape资源
+        mFlow.setBgDrawable(selectedShape, unSelectedShape);
+        //设置是否默认选中第一个
         mFlow.setSelectedFirstItem();
 
-        mFlow.setOnItemChangedListener(new FlowingLayout.OnItemChangedListener<String,BorderTextView>() {
+        //item 点击事件
+        mFlow.setOnItemChangedListener(new FlowingLayout.OnItemChangedListener<String, BorderTextView>() {
             @Override
-            public void itemClick(BorderTextView itemView, int pos,String dataItem) {
+            public void itemClick(BorderTextView itemView, int pos, String dataItem) {
 
-                Toast.makeText(MainActivity.this, "this is "+dataItem, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "this is " + dataItem, Toast.LENGTH_SHORT).show();
             }
         });
+        //设置child 左右间距
         mFlow.setChildLRMargin(20);
         mFlow.setChildTBMargin(5);
+        //设置内间距
         mFlow.setChildPadding(15, 15, 15, 15);
 
         mFlow.setAdapter(commonFlowAdapter);
