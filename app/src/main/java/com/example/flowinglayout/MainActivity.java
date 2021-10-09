@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
         mFlow.setSelectedFirstItem();
 
-        mFlow.setOnItemChangedListener(new FlowingLayout.OnItemChangedListener<BorderTextView>() {
+        mFlow.setOnItemChangedListener(new FlowingLayout.OnItemChangedListener<String,BorderTextView>() {
             @Override
-            public void itemClick(BorderTextView itemView, int pos) {
+            public void itemClick(BorderTextView itemView, int pos,String dataItem) {
 
-                Toast.makeText(MainActivity.this, "this is "+pos, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "this is "+dataItem, Toast.LENGTH_SHORT).show();
             }
         });
         mFlow.setChildLRMargin(20);

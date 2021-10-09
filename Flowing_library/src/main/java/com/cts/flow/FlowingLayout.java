@@ -329,12 +329,13 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    private <V> void changeAdapter() {
+    private <D,V> void changeAdapter() {
         removeAllViews();
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
+            D dataItem = (D) mTagAdapter.getItem(i);
             //获取内部子元素控件
-            V tagView = (V) mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
+            V tagView = (V) mTagAdapter.getView(this, i, dataItem);
 
             View itemView = (View) tagView;
             itemView.setPadding(l, t, r, b);
@@ -347,7 +348,7 @@ public class FlowingLayout extends ViewGroup {
                     resetSelectBGDrawable();
 
                     if (onItemChangedListener != null) {
-                        onItemChangedListener.itemClick(tagView, finalI);
+                        onItemChangedListener.itemClick(tagView, finalI,dataItem);
                     }
                     setSelectBGDrawable(itemView, finalI);
                 }
@@ -410,7 +411,7 @@ public class FlowingLayout extends ViewGroup {
         this.unSelectedDrawable = unSelectedDrawable;
     }
 
-    public interface OnItemChangedListener<V> {
-        void itemClick(V itemView, int pos);
+    public interface OnItemChangedListener<D,V> {
+        void itemClick(V itemView, int pos,D itemData);
     }
 }
