@@ -1,6 +1,7 @@
 package com.cts.flow;
 
 import android.content.Context;
+import android.util.SparseArray;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +11,8 @@ import java.util.List;
 
 public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
     protected List<D> mDatas = new ArrayList<>();
-    private int mLayoutId = R.layout.flow_item;
+    protected SparseArray<V> mViews = new SparseArray<>();
+
     private Context mContext;
 
     private Class<V> viewClass;
@@ -40,7 +42,11 @@ public abstract class CommonFlowAdapter<D, V> extends FlowBaseAdapter<D, V> {
     @Override
     public V getView(FlowingLayout flowingLayout, int pos, D itemData) {
 
-        V itemView = newTclass(viewClass);
+        V itemView = mViews.get(pos);
+        if (itemView==null){
+            itemView = newTclass(viewClass);
+            mViews.put(pos,itemView);
+        }
         convert(itemView, pos, itemData);
         return itemView;
     }

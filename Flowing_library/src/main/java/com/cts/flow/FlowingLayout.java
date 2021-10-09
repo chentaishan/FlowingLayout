@@ -3,7 +3,7 @@ package com.cts.flow;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * flowingLayout 只负责排序子元素，比如计算一行是否放的下子元素，如果放不下换行继续排放，仅此而已
+ */
 public class FlowingLayout extends ViewGroup {
 
     private final int mGravity;
-
-//    private Drawable default_border;
 
     private static final int LEFT = -1;
     private static final int CENTER = 0;
@@ -33,12 +33,10 @@ public class FlowingLayout extends ViewGroup {
             changeAdapter();
         }
     };
-    private int l =15;
-    private int t =5;
-    private int r =15;
-    private int b =5;
-    private int strokeWidth = 1;
-    private int textChildColor = R.color.black;
+    private int l = 15;
+    private int t = 5;
+    private int r = 15;
+    private int b = 5;
 
     public FlowingLayout(Context context) {
         this(context, null);
@@ -59,6 +57,7 @@ public class FlowingLayout extends ViewGroup {
     }
 
     private static final String TAG = "FlowingLayout";
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // 获取XML设置的大小和测量模式
@@ -87,8 +86,10 @@ public class FlowingLayout extends ViewGroup {
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
 
 //            获取子元素的宽高
-            int childWidth = child.getMeasuredWidth() + leftMargin  + rightMargin ;;
-            int childHeight = child.getMeasuredHeight() + topMargin +  bottomMargin;;
+            int childWidth = child.getMeasuredWidth() + leftMargin + rightMargin;
+            ;
+            int childHeight = child.getMeasuredHeight() + topMargin + bottomMargin;
+            ;
 
             if (lineWidth + childWidth > widthSize) {
                 width = Math.max(width, lineWidth);
@@ -97,7 +98,7 @@ public class FlowingLayout extends ViewGroup {
 
                 height += lineHeight;
                 lineHeight = childHeight;
-                Log.d(TAG, "onMeasure: "+height);
+                Log.d(TAG, "onMeasure: " + height);
             } else {
                 lineWidth += childWidth;
                 lineHeight = Math.max(lineHeight, childHeight);
@@ -117,12 +118,12 @@ public class FlowingLayout extends ViewGroup {
 
     //数据的总结构
     protected List<List<View>> mAllViews = new ArrayList<List<View>>(); //0-list   1-list
-//    每一行的高度
+    //每一行的高度
     protected List<Integer> mLineHeight = new ArrayList<Integer>();
     //每一行的宽度
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
 
-//    每一行的子元素
+    //每一行的子元素
     private List<View> lineViews = new ArrayList<>();
 
     private int leftMargin = 10;
@@ -133,7 +134,7 @@ public class FlowingLayout extends ViewGroup {
     /**
      * 设置左右 外边距
      *
-     * @param margin  注意是px
+     * @param margin 注意是px
      */
     public void setChildLRMargin(int margin) {
 
@@ -144,6 +145,7 @@ public class FlowingLayout extends ViewGroup {
 
     /**
      * 设置上下边距
+     *
      * @param margin
      */
     public void setChildTBMargin(int margin) {
@@ -160,37 +162,19 @@ public class FlowingLayout extends ViewGroup {
 
     /**
      * 设置内边距    注意---像素px
+     *
      * @param l
      * @param t
      * @param r
      * @param b
      */
-    public void setPadding(int l,int t,int r,int b){
+    public void setPadding(int l, int t, int r, int b) {
         this.l = l;
         this.t = t;
         this.r = r;
         this.b = b;
     }
 
-//    public  Drawable getBgDrawable() {
-//
-//        GradientDrawable radiusBg = new GradientDrawable();
-//        //设置Shape类型
-//        radiusBg.setShape(GradientDrawable.RECTANGLE);
-//        //设置填充颜色
-////        radiusBg.setColor(Color.parseColor(colorValue));
-//        //设置线条粗心和颜色,px
-//        radiusBg.setStroke(strokeWidth, Color.GRAY);
-//        //设置圆角角度,如果每个角度都一样,则使用此方法
-//        radiusBg.setCornerRadius(15);
-//
-//        return radiusBg;
-//
-//    }
-
-    public void setChildTextColor(int textChildColor){
-        this.textChildColor = textChildColor;
-    }
 
     private void setTopMargin(int topMargin) {
 
@@ -217,7 +201,6 @@ public class FlowingLayout extends ViewGroup {
         int lineWidth = 0;
         int lineHeight = 0;
 
-
         int cCount = getChildCount();
 
         for (int i = 0; i < cCount; i++) {
@@ -238,10 +221,12 @@ public class FlowingLayout extends ViewGroup {
                 mLineWidth.add(lineWidth);
 
                 lineWidth = 0;
-                lineHeight = childHeight + topMargin + bottomMargin;;
+                lineHeight = childHeight + topMargin + bottomMargin;
+                ;
                 lineViews = new ArrayList<View>();
             }
-            lineWidth += childWidth + leftMargin + rightMargin;;
+            lineWidth += childWidth + leftMargin + rightMargin;
+            ;
             lineHeight = Math.max(lineHeight, childHeight + topMargin + bottomMargin);
             lineViews.add(child);
 
@@ -329,11 +314,12 @@ public class FlowingLayout extends ViewGroup {
 
     /**
      * 设置适配器
+     *
      * @param adapter
      */
-    public <D,V> void setAdapter(CommonFlowAdapter<D,V> adapter) {
+    public <D, V> void setAdapter(CommonFlowAdapter<D, V> adapter) {
 
-        if (mTagAdapter!=null){
+        if (mTagAdapter != null) {
             mTagAdapter.unregisterDataSetObserver(dataSetObserver);
         }
         mTagAdapter = adapter;
@@ -343,25 +329,88 @@ public class FlowingLayout extends ViewGroup {
 
     }
 
-    private <D,V>void changeAdapter() {
+    private <D, V> void changeAdapter() {
         removeAllViews();
 
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
-//            获取内部子元素控件
+            //获取内部子元素控件
             V tagView = (V) mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
 
-//            mTagAdapter.getTextView().setTextColor(textChildColor);
-//            tagViewContainer = new TagView(getContext());
+            View itemView = (View) tagView;
+            itemView.setPadding(l, t, r, b);
 
-            ((View)tagView).setPadding(l,t,r,b);
+            int finalI = i;
+            itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO 重置上次选中的状态
+                    resetSelectBGDrawable();
 
-//            tagViewContainer.addView(tagView);
-            addView((View)tagView);
-//            tagViewContainer. setConfig(10,Color.RED,Color.BLUE);
-
+                    if (onItemChangedListener != null) {
+                        onItemChangedListener.itemClick(tagView, finalI);
+                    }
+                    setSelectBGDrawable(itemView, finalI);
+                }
+            });
+            if (unSelectedDrawable != null) {
+                itemView.setBackground(unSelectedDrawable);
+            }
+            //第一个被默认选中
+            if (currSelectedPos!=-1&&finalI==0){
+                setSelectBGDrawable(itemView, finalI);
+            }
+            addView(itemView);
         }
-
     }
 
+    /**
+     * 设置默认显示第一个被选中
+     */
+    public void setSelectedFirstItem(){
+        currSelectedPos =0;
+    }
 
+    private void setSelectBGDrawable(View itemView, int finalI) {
+        if (selectedDrawable == null)
+            return;
+        currSelectedPos = finalI;
+        itemView.setBackground(selectedDrawable);
+    }
+
+    /**
+     * 重置上次选中的状态
+     */
+    private <V> void resetSelectBGDrawable() {
+        if (unSelectedDrawable == null)
+            return;
+        if (mTagAdapter == null || currSelectedPos == -1)
+            return;
+        for (int i = 0; i < mTagAdapter.getCount(); i++) {
+            if (currSelectedPos == i) {
+                V item = (V) mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
+                ((View) item).setBackground(unSelectedDrawable);
+            }
+        }
+    }
+
+    //单选记录上次选中的view的下标
+    private int currSelectedPos = -1;
+
+    private Drawable selectedDrawable;
+    private Drawable unSelectedDrawable;
+
+    private OnItemChangedListener onItemChangedListener;
+
+    public void setOnItemChangedListener(OnItemChangedListener onItemChangedListener) {
+        this.onItemChangedListener = onItemChangedListener;
+    }
+
+    public void setBgDrawable(Drawable selectedDrawable, Drawable unSelectedDrawable) {
+        this.selectedDrawable = selectedDrawable;
+        this.unSelectedDrawable = unSelectedDrawable;
+    }
+
+    public interface OnItemChangedListener<V> {
+        void itemClick(V itemView, int pos);
+    }
 }
