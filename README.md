@@ -42,7 +42,7 @@ Android流式布局
 
 效果图： 
 
-![img](https://github.com/chentaishan/FlowingLayout/blob/ef90a5616f5a7a01d2df1ceec26036125318f8a4/images/image1.png)
+![img](https://github.com/cts33/FlowingLayout/blob/master/images/image1.png)
 
 
 1.如何使用
