@@ -48,9 +48,6 @@ public class FlowingLayout extends ViewGroup {
     //单选记录上次选中的view的下标
     private int currSelectedPos = -1;
 
-    private Drawable selectedDrawable;
-    private Drawable unSelectedDrawable;
-
     private OnItemChangedListener onItemChangedListener;
 
     DataSetObserver dataSetObserver = new DataSetObserver() {
@@ -356,8 +353,8 @@ public class FlowingLayout extends ViewGroup {
                     setSelectBGDrawable(itemView, finalI);
                 }
             });
-            if (unSelectedDrawable != null) {
-                itemView.setBackground(unSelectedDrawable);
+            if (mTagAdapter.setUnSelectedSeletor() != null) {
+                itemView.setBackground(mTagAdapter.setUnSelectedSeletor());
             }
             //第一个被默认选中
             if (currSelectedPos != -1 && finalI == 0) {
@@ -375,35 +372,30 @@ public class FlowingLayout extends ViewGroup {
     }
 
     private void setSelectBGDrawable(View itemView, int finalI) {
-        if (selectedDrawable == null)
+        if (mTagAdapter.setSelectedSeletor() == null)
             return;
         currSelectedPos = finalI;
-        itemView.setBackground(selectedDrawable);
+        itemView.setBackground(mTagAdapter.setSelectedSeletor());
     }
 
     /**
      * 重置上次选中的状态
      */
     private <V> void resetSelectBGDrawable() {
-        if (unSelectedDrawable == null)
+        if (mTagAdapter.setUnSelectedSeletor() == null)
             return;
         if (mTagAdapter == null || currSelectedPos == -1)
             return;
         for (int i = 0; i < mTagAdapter.getCount(); i++) {
             if (currSelectedPos == i) {
                 V item = (V) mTagAdapter.getView(this, i, mTagAdapter.getItem(i));
-                ((View) item).setBackground(unSelectedDrawable);
+                ((View) item).setBackground(mTagAdapter.setUnSelectedSeletor());
             }
         }
     }
 
     public void setOnItemChangedListener(OnItemChangedListener onItemChangedListener) {
         this.onItemChangedListener = onItemChangedListener;
-    }
-
-    public void setBgDrawable(Drawable selectedDrawable, Drawable unSelectedDrawable) {
-        this.selectedDrawable = selectedDrawable;
-        this.unSelectedDrawable = unSelectedDrawable;
     }
 
     public interface OnItemChangedListener<D, V> {

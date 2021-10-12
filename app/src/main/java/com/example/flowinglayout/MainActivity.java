@@ -1,5 +1,6 @@
 package com.example.flowinglayout;
 
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mBorder.setText("这是一个单个文本组件，实现边框 内容背景着色，文本颜色，文本大小");
         mBorder.setPadding(5, 5, 5, 5);
         mBorder.setDefaultConfig();
-//        mBorder.setSelfConfig(5, getResources().getColor(R.color.selected_bg_color), 1, getResources().getColor(R.color.stroke_color));
+        mBorder.setSelfConfig(5, getResources().getColor(R.color.selected_bg_color), 1, getResources().getColor(R.color.stroke_color));
 
 
         initView();
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         list.add("乌鲁木齐");
         list.add("布局");
         list.add("齐齐哈尔");
+        list.add("FFFFFFFF");
+        list.add("布局");
+        list.add("乌鲁木齐");
+        list.add("布局");
+        list.add("齐齐哈尔");
         list.add("布局");
         list.add("布局");
         list.add("齐齐哈尔");
@@ -56,15 +62,10 @@ public class MainActivity extends AppCompatActivity {
         list.add("乌鲁木齐");
         list.add("布局");
         list.add("乌鲁木齐");
-
-        //准备两个资源shape，一个是item 被选中的资源，另一个未被选中的资源shape
-        GradientDrawable selectedShape = createShape(getResources().getColor(R.color.selected_bg_color), getResources().getColor(R.color.stroke_color), 1, 10);
-        GradientDrawable unSelectedShape = createShape(getResources().getColor(R.color.white), getResources().getColor(R.color.gray), 1, 10);
 
 
         mFlow = (FlowingLayout) findViewById(R.id.flow);
-        //设置item 选中和未选的shape资源
-        mFlow.setBgDrawable(selectedShape, unSelectedShape);
+
         //设置是否默认选中第一个
         mFlow.setSelectedFirstItem();
 
@@ -116,6 +117,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public String getItem(int i) {
             return mDatas.get(i);
+        }
+
+        @Override
+        protected Drawable setSelectedSeletor() {
+
+            //准备两个资源shape，一个是item 被选中的资源，另一个未被选中的资源shape
+            GradientDrawable selectedShape = createShape(getResources().getColor(R.color.selected_bg_color), getResources().getColor(R.color.stroke_color), 1, 10);
+
+            return selectedShape;
+        }
+
+        @Override
+        protected Drawable setUnSelectedSeletor() {
+            GradientDrawable unSelectedShape = createShape(getResources().getColor(R.color.white), getResources().getColor(R.color.gray), 1, 10);
+
+            return unSelectedShape;
         }
     };
 }
